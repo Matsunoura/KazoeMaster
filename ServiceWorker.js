@@ -1,4 +1,4 @@
-const cacheName = "DefaultCompany-sagashimonoMaster-1.01";
+const cacheName = "DefaultCompany-sagashimonoMaster-1.02";
 const contentToCache = [
     "Build/UnityApps.loader.js",
     "Build/UnityApps.framework.js",
