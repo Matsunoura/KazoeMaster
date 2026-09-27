@@ -107,5 +107,45 @@
       };
       document.body.appendChild(script);
     </script>
+  
+    <!-- /* MOBILE_WEBAUDIO_UNLOCK */ -->
+    <script>
+      (function() {
+        var unlocked = false;
+        function getAudioContext() {
+          if (typeof WEBAudio !== 'undefined' && WEBAudio.audioContext) {
+            return WEBAudio.audioContext;
+          }
+          if (typeof unityAudioContext !== 'undefined' && unityAudioContext) {
+            return unityAudioContext;
+          }
+          return null;
+        }
+
+        function unlockAudio() {
+          try {
+            var ctx = getAudioContext();
+            if (ctx) {
+              if (ctx.state === 'suspended') {
+                ctx.resume();
+              }
+              if (ctx.state === 'running') {
+                var buffer = ctx.createBuffer(1, 1, 22050);
+                var src = ctx.createBufferSource();
+                src.buffer = buffer;
+                src.connect(ctx.destination);
+                src.start(0);
+              }
+            }
+          } catch(e) {}
+        }
+
+        ['touchstart', 'touchend', 'pointerdown', 'mousedown', 'keydown'].forEach(function(ev) {
+          window.addEventListener(ev, unlockAudio, { passive: true, capture: true });
+          document.addEventListener(ev, unlockAudio, { passive: true, capture: true });
+        });
+      })();
+    </script>
+
   </body>
 </html>
